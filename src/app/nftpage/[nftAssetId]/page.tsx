@@ -1,5 +1,5 @@
 "use client";
-import React, {useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Afacad } from "next/font/google";
 import ActionIcons from "../../components/NFTPage/ActionIcons";
 import DescriptionCard from "../../components/NFTPage/DescriptionCard";
@@ -33,10 +33,9 @@ export interface NFTData {
   imageUrl: string;
 }
 
-
-
 const NFTMarketplacePage: React.FC = () => {
-  const {nftAssetId} = useParams();
+  const { nftAssetId } = useParams();
+
   console.log(nftAssetId);
   const [nftData, setNftData] = useState<NFTData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,23 +63,26 @@ const NFTMarketplacePage: React.FC = () => {
     fetchNFT();
   }, [nftAssetId]);
 
-
   if (loading) {
-    return <div className="min-h-screen bg-black text-white">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-black pt-16 text-white">Loading...</div>
+    );
   }
 
   if (!nftData) {
-    return <div className="min-h-screen bg-black text-white">NFT not found</div>;
+    return (
+      <div className="min-h-screen bg-black pt-16 text-white">
+        NFT not found
+      </div>
+    );
   }
-
-
 
   return (
     <div
-      className={`${afacad.className} flex min-h-screen pt-16 bg-black text-white`}
+      className={`${afacad.className} flex flex-col md:flex-row min-h-screen pt-16 bg-black text-white`}
     >
-      <div className="w-1/2 p-6">
-        <div className="flex">
+      <div className="w-full md:w-1/2 p-6">
+        <div className="flex items-center mb-8">
           <ActionIcons />
           <div className="rounded-lg overflow-hidden mt-4 mb-6 mx-auto max-w-md">
             <img
@@ -96,7 +98,7 @@ const NFTMarketplacePage: React.FC = () => {
         />
       </div>
 
-      <div className="w-1/2 p-6">
+      <div className="w-full md:w-1/2 p-6">
         <NFTDetails nftData={nftData} />
       </div>
     </div>

@@ -1,4 +1,3 @@
-// components/Collection/SidebarFilters.tsx
 import React, { useState } from "react";
 
 interface Trait {
@@ -25,7 +24,6 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
     price: false,
   });
 
-  // State to track expansion for each trait item
   const [traitExpanded, setTraitExpanded] = useState<{
     [key: string]: boolean;
   }>(() =>
@@ -49,7 +47,6 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
     }));
   };
 
-  // Helper component for the toggle arrow
   const ToggleArrow = ({ isOpen }: { isOpen: boolean }) => (
     <svg
       className={`w-4 h-4 transform transition-transform duration-200 ${
@@ -68,13 +65,11 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
 
   return (
     <div className="bg-black text-white p-6">
-      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-gray-400 text-lg tracking-wider">FILTERS</h2>
         <button className="text-gray-400 text-2xl">«</button>
       </div>
 
-      {/* Status */}
       <div className="mb-8">
         <h3 className="text-md mb-4">STATUS</h3>
         <div className="flex items-center mb-3">
@@ -87,7 +82,6 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
         </div>
       </div>
 
-      {/* Rarity */}
       <div className="mb-4">
         <div
           className="flex justify-between items-center cursor-pointer"
@@ -111,7 +105,6 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
         )}
       </div>
 
-      {/* Price */}
       <div className="mb-8">
         <div
           className="flex justify-between items-center cursor-pointer"
@@ -135,10 +128,8 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
         )}
       </div>
 
-      {/* Divider */}
       <div className="h-px bg-gray-700 mb-8"></div>
 
-      {/* Traits */}
       <div>
         <div
           className="flex justify-between items-center mb-4 cursor-pointer"

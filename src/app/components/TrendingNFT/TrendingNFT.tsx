@@ -41,29 +41,29 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
   };
 
   return (
-    <div className="bg-[#080808] rounded-xl shadow-lg ">
+    <div className="bg-[#080808] rounded-xl shadow-lg">
       <TabMenu />
       {/* Table */}
       <div className="overflow-x-auto text-white p-6 font-roboto-mono">
-        <table className="w-full text-left border-separate border-spacing-0">
+        <table className="w-full text-left border-separate border-spacing-0 min-w-[600px] md:min-w-0">
           <thead>
             <tr className="uppercase text-xs">
-              <th className="py-5 font-semibold pl-5 rounded-tl-lg bg-[#131419] text-white">
+              <th className="py-5 font-semibold pl-5 rounded-tl-lg bg-[#131419] text-white whitespace-nowrap">
                 Collection
               </th>
-              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white">
+              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white whitespace-nowrap">
                 Volume(300)
               </th>
-              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white">
+              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white whitespace-nowrap">
                 Floor
               </th>
-              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white">
+              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white whitespace-nowrap">
                 Sales
               </th>
-              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white">
+              <th className="py-5 font-semibold pl-5 bg-[#131419] text-white whitespace-nowrap">
                 Last Sold
               </th>
-              <th className="py-5 pl-4 rounded-tr-lg bg-[#131419]"></th>
+              <th className="py-5 pl-4 rounded-tr-lg bg-[#131419] whitespace-nowrap"></th>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +86,7 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
                 >
                   {/* Collection */}
                   <td
-                    className={`py-4 pl-4 ${
+                    className={`py-4 pl-4 whitespace-nowrap ${
                       isLast ? "rounded-bl-lg" : "border-b border-gray-800"
                     }`}
                   >
@@ -107,7 +107,7 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
                   </td>
                   {/* Volume(300) */}
                   <td
-                    className={`py-4 pl-4 ${
+                    className={`py-4 pl-4 whitespace-nowrap ${
                       isLast ? "" : "border-b border-gray-800"
                     }`}
                   >
@@ -118,7 +118,7 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
                   </td>
                   {/* Floor */}
                   <td
-                    className={`py-4 pl-4 ${
+                    className={`py-4 pl-4 whitespace-nowrap ${
                       isLast ? "" : "border-b border-gray-800"
                     }`}
                   >
@@ -129,7 +129,7 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
                   </td>
                   {/* Sales */}
                   <td
-                    className={`py-4 pl-4 ${
+                    className={`py-4 pl-4 whitespace-nowrap ${
                       isLast ? "" : "border-b border-gray-800"
                     }`}
                   >
@@ -139,7 +139,7 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
                   </td>
                   {/* Last Sold */}
                   <td
-                    className={`py-4 pl-4 ${
+                    className={`py-4 pl-4 whitespace-nowrap ${
                       isLast ? "" : "border-b border-gray-800"
                     }`}
                   >
@@ -156,7 +156,7 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
                   </td>
                   {/* Favourite Star */}
                   <td
-                    className={`py-4 pl-4 pr-4 text-2xl ${
+                    className={`py-4 pl-4 pr-4 text-2xl whitespace-nowrap ${
                       isLast ? "rounded-br-lg" : "border-b border-gray-800"
                     }`}
                   >
@@ -181,7 +181,7 @@ const TrendingNFT: React.FC<TrendingNFTProps> = ({ data, limit }) => {
       {limit && data.length > limit && (
         <div className="flex justify-center mt-4">
           <Link href="/collections">
-            <button className="bg-black border-[1px] border-gray-800 hover:bg-[#6A4FB2] text-white font-bold py-2 px-4 rounded transition-colors">
+            <button className="bg-black border-[1px] border-gray-800 hover:bg-[#6A4FB2] text-white font-bold py-2 mb-8 px-4 rounded transition-colors">
               View All
             </button>
           </Link>

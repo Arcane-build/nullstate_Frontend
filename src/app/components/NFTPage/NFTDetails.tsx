@@ -14,6 +14,12 @@ interface NFTDetailsProps {
 
 const NFTDetails: React.FC<NFTDetailsProps> = ({ nftData }) => {
   console.log("NFTData", nftData);
+  const spliceAssetId = (assetId: string) => {
+    if (!assetId || assetId.length <= 8) return assetId;
+    return `${assetId.substring(0, 4)}...${assetId.substring(
+      assetId.length - 4
+    )}`;
+  };
   return (
     <div>
       {/* Header: Title and Owner */}
@@ -36,7 +42,7 @@ const NFTDetails: React.FC<NFTDetailsProps> = ({ nftData }) => {
       {/* Additional Information */}
       <AdditionalInfo
         contactAddress={nftData.contactAddress}
-        tokenId={nftData.tokenId}
+        tokenId={spliceAssetId(nftData.tokenId)}
         creator={nftData.creator}
         creatorFee={nftData.creatorFee}
       />

@@ -1,4 +1,3 @@
-// components/Collection/ProfileStats.tsx
 import React from "react";
 import { Star, Link } from "lucide-react";
 import Discord from "../../../assets/icons/DiscordLogo.svg";
@@ -11,7 +10,7 @@ interface ProfileStatsProps {
 
 const ProfileStats: React.FC<ProfileStatsProps> = ({ data }) => {
   return (
-    <div className="bg-black text-white w-full p-4 flex items-center font-mono justify-between">
+    <div className="bg-black text-white w-full p-4 flex flex-col md:flex-row md:items-center md:justify-between font-mono">
       <div className="flex items-center space-x-3">
         {/* NFT Image */}
         <div className="relative w-12 h-12 bg-red-600 rounded-md overflow-hidden">
@@ -36,7 +35,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ data }) => {
       </div>
 
       {/* Stats Section */}
-      <div className="ml-auto grid grid-cols-6 gap-6">
+      <div className="mt-4 md:mt-0 md:ml-auto grid grid-cols-2 md:grid-cols-6 gap-4 md:gap-6">
         {/* Total Volume */}
         <div className="flex flex-col items-center">
           <span className="text-xs text-[#7F8199]">TOTAL VOLUME</span>

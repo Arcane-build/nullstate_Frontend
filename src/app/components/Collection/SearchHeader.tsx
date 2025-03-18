@@ -14,22 +14,17 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
   onViewChange,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  // const [sliderValue, setSliderValue] = useState(0);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     onSearch?.(e.target.value);
   };
 
-  // const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSliderValue(parseInt(e.target.value));
-  //   onFilterChange?.(parseInt(e.target.value));
-  // };
-
   return (
-    <div className="w-full flex items-center justify-between gap-4 p-4 border-t border-[#272934]">
+    // Use flex-col on small devices and flex-row on larger screens.
+    <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-[#272934]">
       {/* Search input */}
-      <div className="relative rounded-full overflow-hidden bg-black border-[1px] border-[#272934] flex-1 max-w-md">
+      <div className="w-full sm:w-auto relative rounded-full overflow-hidden bg-black border border-[#272934] flex-1 max-w-md">
         <div className="absolute inset-y-0 left-3 flex items-center">
           <Search size={20} className="text-gray-400" />
         </div>
@@ -43,12 +38,13 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
       </div>
 
       {/* Center section */}
-      <div className="flex">
-        <span className="w-40 flex items-center mr-2">OPTIMIZE SWEEP</span>{" "}
+      <div className="w-full sm:w-auto flex items-center sm:ml-4">
+        <span className="w-40 flex items-center mr-2">OPTIMIZE SWEEP</span>
         <SweepSlider />
       </div>
+
       {/* Right section */}
-      <div className="flex items-center space-x-2">
+      <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start space-x-2">
         <div className="relative">
           <button className="px-4 py-2 bg-black border border-gray-700 rounded-md text-white flex items-center">
             Price Low to High

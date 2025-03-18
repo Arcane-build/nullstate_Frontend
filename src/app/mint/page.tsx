@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useMemo,  useCallback } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { Afacad } from "next/font/google";
 // import { useFuel, useIsConnected } from "@fuels/react";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,8 +13,6 @@ import NFTABI from "../../ABI's/NFT/NFT-contract-abi.json";
 import { generateRandomSubId } from "@/utils/randomSubId";
 import { useWallet } from "@fuels/react";
 import { Contract, getMintedAssetId } from "fuels";
-
-
 
 const NFT_CONTRACT_ID =
   "0xbcd6b6790d35474a72091db0f0efb570bbf51228d680f5322011dc566c5ca16e";
@@ -60,8 +58,8 @@ const NFTMintPage: React.FC = () => {
     description: "",
     category: "",
     price: "",
-    collection: "", 
-    collectionDetail: "", 
+    collection: "",
+    collectionDetail: "",
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -71,16 +69,13 @@ const NFTMintPage: React.FC = () => {
   const [minting, setMinting] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-
   const shouldFetchCollections = formData.collection === "existing";
   const { data: existingCollections } = useSWR<Collection[]>(
     shouldFetchCollections ? "/api/nft-collections" : null,
     fetcher
   );
 
-
   const isFormValid = useMemo(() => {
-
     const basicValid =
       formData.name.trim() !== "" &&
       formData.description.trim() !== "" &&
@@ -95,8 +90,8 @@ const NFTMintPage: React.FC = () => {
   const buttonText = uploading
     ? "Uploading..."
     : minting
-      ? "Minting..."
-      : "Mint NFT";
+    ? "Minting..."
+    : "Mint NFT";
   const isButtonDisabled = !isFormValid || uploading || minting;
 
   const handleInputChange = useCallback(
@@ -123,18 +118,21 @@ const NFTMintPage: React.FC = () => {
     []
   );
 
-  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setSelectedFile(file);
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        setSelectedFile(file);
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  }, []);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    []
+  );
 
   const handleImageClick = useCallback(() => {
     fileInputRef.current?.click();
@@ -188,7 +186,6 @@ const NFTMintPage: React.FC = () => {
         setUploading(false);
       }
 
-     
       setMinting(true);
       const contract = new Contract(NFT_CONTRACT_ID, NFTABI, wallet);
       const subId = generateRandomSubId();
@@ -199,7 +196,6 @@ const NFTMintPage: React.FC = () => {
         },
       };
 
-
       const tx = await contract.functions
         .mint(recipientIdentity, subId, 1)
         .txParams({ gasLimit: 10_000_000 })
@@ -209,7 +205,6 @@ const NFTMintPage: React.FC = () => {
       const transactionSummary =
         await transactionResponse.getTransactionSummary();
 
-      
       const mintedAssetId = await getMintedAssetId(NFT_CONTRACT_ID, subId);
 
       if (transactionSummary.status !== "success") {
@@ -235,7 +230,6 @@ const NFTMintPage: React.FC = () => {
       setMinting(false);
       toast.success("NFT minted successfully!");
 
-      
       setFormData({
         name: "",
         description: "",
@@ -254,23 +248,16 @@ const NFTMintPage: React.FC = () => {
     } finally {
       setShowModal(false);
     }
-  }, [
-    wallet,
-    formData,
-    selectedFile,
-    setUploading,
-    setMinting,
-    setShowModal,
-    toast
-  ]);
+  }, [wallet, formData, selectedFile, setUploading, setMinting, setShowModal]);
 
   return (
     <div
       className={`${afacad.className} relative min-h-screen bg-black text-white pt-20`}
     >
       <div className={`${showModal ? "filter blur-sm" : ""}`}>
-        <div className="flex w-full max-w-6xl p-8 gap-24 mx-auto">
-          <div className="w-2/5">
+        {/* For large screens the layout remains exactly the same */}
+        <div className="flex flex-col md:flex-row w-full max-w-6xl p-8 gap-24 mx-auto">
+          <div className="w-full md:w-2/5">
             <div
               className="group bg-[#131419] rounded-[4px] p-6 flex flex-col items-center justify-center h-96 cursor-pointer hover:bg-[#1b1a22] transition-colors duration-300"
               onClick={handleImageClick}
@@ -320,7 +307,7 @@ const NFTMintPage: React.FC = () => {
               <p className="text-sm">Service Fee: 2%</p>
             </div>
           </div>
-          <div className="w-3/5">
+          <div className="w-full md:w-3/5">
             <form className="space-y-6">
               <div>
                 <label className="block mb-2 pl-1">Name</label>
@@ -434,9 +421,10 @@ const NFTMintPage: React.FC = () => {
                 onClick={handleOpenModal}
                 disabled={isButtonDisabled}
                 className={`w-full font-bold py-3 px-4 rounded-[4px] transition duration-300 
-                  ${isButtonDisabled
-                    ? "bg-gray-500 cursor-not-allowed"
-                    : "bg-[#4023B5] hover:bg-purple-700"
+                  ${
+                    isButtonDisabled
+                      ? "bg-gray-500 cursor-not-allowed"
+                      : "bg-[#4023B5] hover:bg-purple-700"
                   } flex justify-center items-center`}
               >
                 {(uploading || minting) && (
@@ -515,8 +503,8 @@ const NFTMintPage: React.FC = () => {
                         {formData.collection === "existing"
                           ? `Existing: ${formData.collectionDetail}`
                           : formData.collection === "new"
-                            ? `New: ${formData.collectionDetail}`
-                            : ""}
+                          ? `New: ${formData.collectionDetail}`
+                          : ""}
                       </span>
                     </div>
                     <div className="flex flex-col">
