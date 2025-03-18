@@ -1,13 +1,23 @@
 import {NextRequest,NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 
-
+  
 export async function GET(
     request: NextRequest,
-    {params} : {params: {collectionName: string}}
 ){
     try {
-        const {collectionName} = params;
+
+        const pathParts = request.nextUrl.pathname.split("/");
+      
+
+        const collectionName = pathParts[3]; 
+        console.log("Extracted collectionName:", collectionName); 
+        if(!collectionName){
+            return NextResponse.json(
+                {message: "Missing collection name"},
+                {status: 400}
+            );
+        }
         const entries = await prisma.predicateEntry.findMany({
             where:{
                 NFTMinting:{

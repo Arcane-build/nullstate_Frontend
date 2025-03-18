@@ -3,10 +3,10 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { assetId: string } }
+    
   ) {
     try {
-      const { assetId } = params;
+      const assetId = request.nextUrl.pathname.split("/").pop();
       const predicate = await prisma.predicateEntry.findFirst({
         where: { 
           nftId: assetId, 

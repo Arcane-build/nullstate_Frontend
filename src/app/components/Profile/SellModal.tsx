@@ -1,11 +1,6 @@
 // components/SellModal.tsx
 import React, { useState } from "react";
 import {
-  WalletUnlocked,
-  Provider,
-  Contract,
-  ContractFactory,
-  Address,
   bn,
 } from "fuels";
 import { useWallet } from "@fuels/react";
@@ -48,7 +43,7 @@ const SellModal: React.FC<SellModalProps> = ({
   const [askAmount, setAskAmount] = useState("");
   const [askAsset, setAskAsset] = useState("");
   const [isSelling, setIsSelling] = useState(false);
-  const [config, setConfig] = useState<ConfigType | null>(null);
+  // const [config, setConfig] = useState<ConfigType | null>(null);
 
   // Pricing states
   console.log(nftTitle);
@@ -56,20 +51,20 @@ const SellModal: React.FC<SellModalProps> = ({
   console.log(rarity);
   console.log(nftImage);
   console.log(nftAssetId);
-  const [floorPrice, setFloorPrice] = useState("");
-  const [topTraitPrice, setTopTraitPrice] = useState("");
-  const [startingPrice, setStartingPrice] = useState("");
-  const [listingPrice, setListingPrice] = useState("");
+  // const [floorPrice, setFloorPrice] = useState("");
+  // const [topTraitPrice, setTopTraitPrice] = useState("");
+  // const [startingPrice, setStartingPrice] = useState("");
+  // const [listingPrice, setListingPrice] = useState("");
 
-  // Duration state
-  const [duration, setDuration] = useState("");
+  // // Duration state
+  // const [duration, setDuration] = useState("");
 
-  // Fee and earnings states
-  const [openSeaFee, setOpenSeaFee] = useState("");
-  const [creatorEarnings, setCreatorEarnings] = useState("");
+  // // Fee and earnings states
+  // const [openSeaFee, setOpenSeaFee] = useState("");
+  // const [creatorEarnings, setCreatorEarnings] = useState("");
 
-  // Total potential earnings
-  const [totalEarnings, setTotalEarnings] = useState("");
+  // // Total potential earnings
+  // const [totalEarnings, setTotalEarnings] = useState("");
 
   async function createPredicateEntry(entry: Entry) {
     try {

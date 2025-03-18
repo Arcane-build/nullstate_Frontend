@@ -11,7 +11,7 @@ export async function POST(request:NextRequest){
             config
         }
         = body;
-        const newEntry = await createPredicateEntry({
+        await createPredicateEntry({
             sellerAddress,
             predicateAddress,
             nftAssetId,

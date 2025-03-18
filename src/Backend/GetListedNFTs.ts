@@ -33,7 +33,7 @@ export async function getListedNFTs(){
 }
 export async function changePredicateStatus(id:string){
     try {
-        const nfts = await prisma.predicateEntry.update({
+         await prisma.predicateEntry.update({
             where:{
                 predicateId:id
             },

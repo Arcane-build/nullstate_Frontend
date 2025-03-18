@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { nfts } from "../../data/userNFTData";
+// import { nfts } from "../../data/userNFTData";
 import BuyTable from "../components/Buy/BuyTable";
 import NFTCollectionDisplay from "../components/Profile/CollectionDispay";
-import { getUserNFTs } from "@/Backend/GetUserNFT";
+// import { getUserNFTs } from "@/Backend/GetUserNFT";
 import { useIsConnected, useWallet } from "@fuels/react";
 
 interface NFT {

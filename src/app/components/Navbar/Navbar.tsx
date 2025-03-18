@@ -3,10 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
-  useFuel,
+
   useIsConnected,
   useAccounts,
-  useWallet,
   useConnectUI,
   useDisconnect,
 } from "@fuels/react";
@@ -14,29 +13,29 @@ import {
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const { wallet } = useWallet();
-  const { fuel } = useFuel();
+  // const { wallet } = useWallet();
+  // const { fuel } = useFuel();
   const { isConnected } = useIsConnected();
   const { accounts } = useAccounts();
-  const { connect, theme, isConnecting } = useConnectUI();
+  const { connect } = useConnectUI();
   const { disconnect } = useDisconnect();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleSignOut = () => {
-    setIsDropdownOpen(false);
-    // Add actual sign out logic here
-  };
+  // const handleSignOut = () => {
+  //   setIsDropdownOpen(false);
+  //   // Add actual sign out logic here
+  // };
 
   const handleSwitchAccount = () => {
     setIsDropdownOpen(false);
     // Add actual switch account logic here
   };
 
-  const handleProfile = () => {
-    setIsDropdownOpen(false);
-    // Add navigation to profile page or profile logic here
-  };
+  // const handleProfile = () => {
+  //   setIsDropdownOpen(false);
+  //   // Add navigation to profile page or profile logic here
+  // };
 
   useEffect(() => {
     const handleScroll = () => {

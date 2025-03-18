@@ -1,5 +1,5 @@
 "use client";
-import React ,{useEffect, useState} from "react";
+import React ,{useEffect} from "react";
 import ProfileStats from "../components/Collection/ProfileStats";
 import SidebarFilters from "../components/Collection/SidebarFilters";
 import NFTCollectionDisplay from "../components/Collection/NFTCollectionDisplay";
@@ -17,26 +17,20 @@ import {
 import { useParams } from "next/navigation";
 
 const afacad = Afacad({ subsets: ["latin"], weight: ["400", "600", "700"] });
-// {
-//   id: 1,
-//   title: "THE SISTERS #1234",
-//   price: 0.0074,
-//   tokenId: "#4567",
-//   imageUrl: "/images/image 212.png",
-// },
-interface PredicateNFT{
-  id: number;
-  title: string;
-  price: number;
-  tokenId: string;
-  imageUrl: string;
-}
+
+// interface PredicateNFT{
+//   id: number;
+//   title: string;
+//   price: number;
+//   tokenId: string;
+//   imageUrl: string;
+// }
 
 
 const NFTCollectionPage: React.FC = () => {
 
   const params = useParams(); // e.g. { collectionName: 'Azuki' }
-  const [predicateEntries, setPredicateEntries] = useState<PredicateNFT[]>([]);
+  // const [predicateEntries, setPredicateEntries] = useState<PredicateNFT[]>([]);
   const { collectionName } = params || {};
 
   useEffect(() => {
@@ -49,7 +43,7 @@ const NFTCollectionPage: React.FC = () => {
           throw new Error(`Failed to fetch: ${res.status}`);
         }
         const data = await res.json();
-        setPredicateEntries(data);
+        return data
       } catch (error) {
         console.error(error);
       }

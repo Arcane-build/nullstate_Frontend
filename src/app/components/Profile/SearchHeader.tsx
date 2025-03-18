@@ -11,7 +11,6 @@ interface SearchHeaderProps {
 const SearchHeader: React.FC<SearchHeaderProps> = ({
   onSearch,
   onViewChange,
-  onFilterChange,
   onSortChange,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");

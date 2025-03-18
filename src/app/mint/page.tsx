@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useMemo,  useCallback } from "react";
 import { Afacad } from "next/font/google";
-import { useFuel, useIsConnected } from "@fuels/react";
+// import { useFuel, useIsConnected } from "@fuels/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Eth from "../../assets/icons/Eth.svg";
@@ -53,8 +53,8 @@ const fetcher = async (url: string) => {
 
 const NFTMintPage: React.FC = () => {
   const { wallet } = useWallet();
-  const { fuel } = useFuel();
-  const { isConnected } = useIsConnected();
+  // const { fuel } = useFuel();
+  // const { isConnected } = useIsConnected();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -73,7 +73,7 @@ const NFTMintPage: React.FC = () => {
 
 
   const shouldFetchCollections = formData.collection === "existing";
-  const { data: existingCollections, error } = useSWR<Collection[]>(
+  const { data: existingCollections } = useSWR<Collection[]>(
     shouldFetchCollections ? "/api/nft-collections" : null,
     fetcher
   );

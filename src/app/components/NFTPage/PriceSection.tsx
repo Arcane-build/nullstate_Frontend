@@ -2,7 +2,7 @@
 import React from "react";
 import Eth from "../../../assets/icons/Eth.svg";
 import { useWallet } from '@fuels/react';
-import { BN, ScriptTransactionRequest, bn, Address, Output, OutputType } from 'fuels';
+import {ScriptTransactionRequest, bn, Address, Output, OutputType } from 'fuels';
 import { NftFixedPriceSwapPredicate } from "../../../ABI's/PREDICATE/NftFixedPriceSwapPredicate";
 import { changePredicateStatus } from "@/Backend/GetListedNFTs";
 interface PriceSectionProps {
@@ -49,7 +49,7 @@ const PriceSection: React.FC<PriceSectionProps> = ({ price, askAsset, tokenId, s
     try {
     
         //INPUTS
-        let predicateInputs = await existingPredicate.getResourcesToSpend([
+        const predicateInputs = await existingPredicate.getResourcesToSpend([
             { amount: bn(1), assetId: tokenId },
         ]);
       

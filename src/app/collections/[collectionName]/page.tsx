@@ -6,7 +6,7 @@ import NFTCollectionDisplay from "../../components/Collection/NFTCollectionDispl
 import SearchHeader from "../../components/Collection/SearchHeader";
 import { Afacad } from "next/font/google";
 
-import { nfts } from "../../../data/nftData";
+
 import { profileStatsData } from "../../../data/profileStatsData";
 import {
   traits,
@@ -15,6 +15,43 @@ import {
   priceData,
 } from "../../../data/sidebarFiltersData";
 import { useParams } from "next/navigation";
+
+
+interface NFTMinting {
+  collectionName: string;
+  id: number;
+  nftCreatedAt: string;
+  nftCreatorAddress: string;
+  nftDescription: string;
+  nftId: string;
+  nftImage: string;
+  nftName: string;
+  nftOwnerAddress: string;
+  nftPrice: string; // Keeping as string since API returns it as a string
+  nftStatus: string;
+  nftUpdatedAt: string;
+}
+
+interface Config {
+  ASK_AMOUNT: string;
+  ASK_ASSET: string;
+  FEE_AMOUNT: string;
+  FEE_ASSET: string;
+  NFT_ASSET_ID: string;
+  TREASURY_ADDRESS: string;
+}
+
+interface PredicateEntry {
+  id: number;
+  nftId: string;
+  predicateId: string;
+  sellerId: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  NFTMinting: NFTMinting;
+  config: Config;
+}
 
 const afacad = Afacad({ subsets: ["latin"], weight: ["400", "600", "700"] });
 // {
@@ -37,20 +74,21 @@ const NFTCollectionPage: React.FC = () => {
 
   const params = useParams(); // e.g. { collectionName: 'Azuki' }
   const [predicateEntries, setPredicateEntries] = useState<PredicateNFT[]>([]);
-  const { collectionName } = params || {};
+  const collectionName = params?.collectionName as string | undefined;
 
   useEffect(() => {
     if (!collectionName) return;
 
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/collections/${collectionName}/predicates`);
+        const res = await fetch(`/api/collections/${encodeURIComponent(collectionName)}/predicates`);
+        console.log("Fetching data for collection:", collectionName);
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
         }
         const data = await res.json();
-        console.log(data);
-        const mappedData = data.map((entry:any) => {
+        console.log("Data is",data);
+        const mappedData = data.map((entry:PredicateEntry) => {
             return {
                 id: entry.id,
                 title: entry.NFTMinting.nftName,

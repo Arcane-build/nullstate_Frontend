@@ -1,5 +1,5 @@
-import {NextRequest,NextResponse} from "next/server";
-import {getUserNFTs} from "@/Backend/GetUserNFT";
+import {NextResponse} from "next/server";
+
 import {getListedNFTs} from "@/Backend/GetListedNFTs";
 
 export async function GET(){

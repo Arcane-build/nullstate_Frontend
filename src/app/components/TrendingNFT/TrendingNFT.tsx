@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TabMenu from "./TabMenu";
 import Eth from "../../../assets/icons/Eth.svg";
 import { useRouter } from "next/navigation";
