@@ -1,0 +1,8 @@
+{
+    "functions": {
+      "api/collections/*": {
+        "runtime": "nodejs18.x"
+      }
+    }
+  }
+  
