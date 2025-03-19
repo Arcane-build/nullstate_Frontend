@@ -1,10 +1,11 @@
 "use client"
-import React from "react";
+import React,{useState} from "react";
 import Eth from "../../../assets/icons/Eth.svg";
 import { useWallet } from '@fuels/react';
 import {ScriptTransactionRequest, bn, Address, Output, OutputType } from 'fuels';
 import { NftFixedPriceSwapPredicate } from "../../../ABI's/PREDICATE/NftFixedPriceSwapPredicate";
 import { changePredicateStatus } from "@/Backend/GetListedNFTs";
+import { useRouter } from "next/navigation";
 interface PriceSectionProps {
   price: number;
   askAsset: string;
@@ -14,7 +15,8 @@ interface PriceSectionProps {
 
 const PriceSection: React.FC<PriceSectionProps> = ({ price, askAsset, tokenId, seller}) => {
   const { wallet } = useWallet();
-
+  const router = useRouter();
+  const [isBuying, setIsBuying] = useState(false);
   const BuyerTransaction = async () => {
     if (!wallet) return alert("No wallet connected!");
     
@@ -28,106 +30,113 @@ const PriceSection: React.FC<PriceSectionProps> = ({ price, askAsset, tokenId, s
 
     ///////////////////////////////////////////
 
-    const configurableConstants = {
-      FEE_AMOUNT: bn(FEE_AMOUNT),
-      FEE_ASSET: { bits: FEE_ASSET },
-      TREASURY_ADDRESS: { bits: TREASURY_ADDRESS },
-      ASK_AMOUNT: bn(price),
-      ASK_ASSET: { bits: askAsset },
-      RECEIVER: { bits: seller}, // 64 chars
-      NFT_ASSET_ID: { bits: tokenId },
-    };
+    try {
+      setIsBuying(true);
 
-    const existingPredicate = new NftFixedPriceSwapPredicate({
+      // 1. Configure the predicate
+      const configurableConstants = {
+        FEE_AMOUNT: bn(FEE_AMOUNT),
+        FEE_ASSET: { bits: FEE_ASSET },
+        TREASURY_ADDRESS: { bits: TREASURY_ADDRESS },
+        ASK_AMOUNT: bn(price),
+        ASK_ASSET: { bits: askAsset },
+        RECEIVER: { bits: seller }, // 64 chars
+        NFT_ASSET_ID: { bits: tokenId },
+      };
+
+      const existingPredicate = new NftFixedPriceSwapPredicate({
         provider: wallet.provider,
         data: [],
         configurableConstants,
-    });
-    console.log("Predicate is ",existingPredicate.address.b256Address)
-    console.log("tokenid is",tokenId)
+      });
 
-    try {
-    
-        //INPUTS
-        const predicateInputs = await existingPredicate.getResourcesToSpend([
-            { amount: bn(1), assetId: tokenId },
-        ]);
-      
-        const totalToSpend = bn(price).add(bn(FEE_AMOUNT));
+      // 2. Gather needed resources
+      const predicateInputs = await existingPredicate.getResourcesToSpend([
+        { amount: bn(1), assetId: tokenId },
+      ]);
 
-        const takerInputs = await wallet.getResourcesToSpend([
-            { amount: totalToSpend, assetId: askAsset },
-        ]);
-    
-        const inputPredicate = predicateInputs[0];
-        const inputFromTaker = takerInputs[0];
+      // total = price + fee
+      const totalToSpend = bn(price).add(bn(FEE_AMOUNT));
+      const takerInputs = await wallet.getResourcesToSpend([
+        { amount: totalToSpend, assetId: askAsset },
+      ]);
 
-        const sellerAddress = new Address(seller);
+      const inputPredicate = predicateInputs[0];
+      const inputFromTaker = takerInputs[0];
 
-        //OUTPUTS
-        const outputToReceiver: Output = {
-            type: OutputType.Coin,
-            to: sellerAddress.toB256(),
-            amount: bn(price),
-            assetId: askAsset,
-        };
+      // 3. Construct outputs
+      const sellerAddress = new Address(seller);
 
-        const outputToTreasury: Output = {
-            type: OutputType.Coin,
-            to: TREASURY_ADDRESS,
-            amount: bn(FEE_AMOUNT),
-            assetId: askAsset,
-        };
+      const outputToReceiver: Output = {
+        type: OutputType.Coin,
+        to: sellerAddress.toB256(),
+        amount: bn(price),
+        assetId: askAsset,
+      };
 
-        const outputToTaker: Output = {
-            type: OutputType.Coin,
-            to: wallet.address.toB256(),
-            amount: bn(1),
-            assetId: tokenId,
-        };
+      const outputToTreasury: Output = {
+        type: OutputType.Coin,
+        to: TREASURY_ADDRESS,
+        amount: bn(FEE_AMOUNT),
+        assetId: askAsset,
+      };
 
-        const outputChangeAsk: Output = {
-            type: OutputType.Change,
-            to: wallet.address.toB256(),
-            amount: bn(0),
-            assetId: askAsset,
-        };
+      const outputToTaker: Output = {
+        type: OutputType.Coin,
+        to: wallet.address.toB256(),
+        amount: bn(1),
+        assetId: tokenId,
+      };
 
-        const outputChangeNFT: Output = {
-            type: OutputType.Change,
-            to: wallet.address.toB256(),
-            amount: bn(0),
-            assetId: tokenId,
-        };
+      // Change outputs
+      const outputChangeAsk: Output = {
+        type: OutputType.Change,
+        to: wallet.address.toB256(),
+        amount: bn(0),
+        assetId: askAsset,
+      };
 
+      const outputChangeNFT: Output = {
+        type: OutputType.Change,
+        to: wallet.address.toB256(),
+        amount: bn(0),
+        assetId: tokenId,
+      };
 
-        const transactionRequest = new ScriptTransactionRequest({
-            maxFee: bn(50_000_000),
-        });
-      
-        transactionRequest.addResources([inputPredicate, inputFromTaker])
-        transactionRequest.outputs=[
-            outputToReceiver,
-            outputToTreasury,
-            outputToTaker,
-            outputChangeAsk,
-            outputChangeNFT,
-        ]
+      // 4. Create and fund transaction
+      const transactionRequest = new ScriptTransactionRequest({
+        maxFee: bn(50_000_000),
+      });
 
-        await transactionRequest.estimateAndFund(existingPredicate);
-        const tx = await wallet.sendTransaction(transactionRequest);
-        const transactionResponse  = await tx.waitForResult();
-        console.log("Transaction Response is ",transactionResponse);
-        if (transactionResponse.status !== "success") {
-          // setMinting(false);
-          // toast.error("Failed to mint NFT");
-          return;
-        }
-        await changePredicateStatus(existingPredicate.address.toString());
-        console.log("Success! Tx:", tx);
+      transactionRequest.addResources([inputPredicate, inputFromTaker]);
+      transactionRequest.outputs = [
+        outputToReceiver,
+        outputToTreasury,
+        outputToTaker,
+        outputChangeAsk,
+        outputChangeNFT,
+      ];
 
+      // 5. Estimate & send transaction
+      await transactionRequest.estimateAndFund(existingPredicate);
+      const tx = await wallet.sendTransaction(transactionRequest);
+      const transactionResponse = await tx.waitForResult();
+
+      // 6. Check result & update backend
+      if (transactionResponse.status !== "success") {
+        setIsBuying(false);
+        return alert("Transaction failed. Please try again.");
+      }
+
+      await changePredicateStatus(existingPredicate.address.toString());
+      console.log("Success! Tx:", tx);
+
+      // 7. Go back to previous page (or wherever you wish to navigate)
+      router.back();
     } catch (error) {
-        console.error("Error initializing predicate:", error);
+      console.error("Error initializing predicate:", error);
+      alert(`Transaction error: ${error}`);
+      setIsBuying(false);
     }
 };
 
@@ -143,8 +152,10 @@ const PriceSection: React.FC<PriceSectionProps> = ({ price, askAsset, tokenId, s
       </div>
       <button className="bg-[#4023B5] hover:bg-indigo-700 w-full py-3 font-medium mb-4"
       onClick={BuyerTransaction}
+      disabled={isBuying}
       >
-        BUY NOW
+        {isBuying ? "Buying..." : "BUY NOW"}
+
       </button>
       <button className="bg-white w-full py-3 font-medium text-[#4023B5]">
         MAKE OFFER
