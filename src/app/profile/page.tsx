@@ -34,6 +34,7 @@ const NFTMarketplacePage = () => {
   const [address, setAddress] = useState("");
   const [userNFTs, setUserNFTs] = useState<FetchedNFT[]>([]);
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (!isConnected || !wallet) return;
@@ -63,6 +64,10 @@ const NFTMarketplacePage = () => {
       const onlyMinted = data.filter((nft) => nft.nftStatus === "Minted");
       console.log("Only minted is ", onlyMinted);
 
+
+
+      
+
       const fetchedNFT: FetchedNFT[] = onlyMinted.map((nft) => {
         return {
           id: nft.id,
@@ -74,6 +79,7 @@ const NFTMarketplacePage = () => {
           nftAssetId: nft.nftId,
         };
       });
+      setCount(fetchedNFT.length);
       setUserNFTs(fetchedNFT);
       setLoading(false);
     } catch (error) {
@@ -131,7 +137,7 @@ const NFTMarketplacePage = () => {
                       : "text-gray-400 hover:text-white"
                   }`}
                 >
-                  COLLECTED {totalCollections}
+                  COLLECTED {count}
                 </button>
                 <button
                   onClick={() => setActiveTab("activity")}
