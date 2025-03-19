@@ -1,7 +1,4 @@
 import React from "react";
-import { Afacad } from "next/font/google";
-
-const afacad = Afacad({ subsets: ["latin"], weight: ["400", "600", "700"] });
 
 const NFTLandingPage = () => {
   return (
