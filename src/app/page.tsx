@@ -21,14 +21,14 @@ const HomePage: React.FC = () => {
 
         <section className="relative flex flex-col items-center justify-center text-center pt-10 pb-16 px-4">
           <div className="w-full mt-56 flex justify-end mr-16">
-            <h1 className="text-[120px] leading-tight mb-48 text-right max-w-3xl">
+            <h1 className="text-7xl md:text-[120px] leading-tight mb-48 text-right max-w-3xl">
               nullstate
             </h1>
           </div>
         </section>
         <CreatorBanner />
-        <section className="px-4 py-8 m-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-items-center">
+        <section className="px-4 py-8 m-4 md:m-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 justify-items-center">
             {nftCollection.map((nft, index) => (
               <NFTCard key={index} imageSrc={nft.imageSrc} title={nft.title} />
             ))}
