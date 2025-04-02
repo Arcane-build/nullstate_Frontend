@@ -14,6 +14,19 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model NFTTransaction {
+  id                 Int      @id @default(autoincrement())
+  nftId              String
+  fromAddress        String
+  toAddress          String
+  price              String
+  transactionType    String   // "buy" or "sell"
+  transactionHash    String   @unique
+  timestamp          DateTime @default(now())
+  NFTMinting         NFTMinting @relation(fields: [nftId], references: [nftId])
+}
+
+
 
 model NFTMinting{
   id Int @id @default(autoincrement())
@@ -29,6 +42,7 @@ model NFTMinting{
   nftUpdatedAt DateTime @default(now())
   collectionName String?
   predicateEntries  predicateEntry[]
+  NFTTransactions NFTTransaction[]
 }
 
 

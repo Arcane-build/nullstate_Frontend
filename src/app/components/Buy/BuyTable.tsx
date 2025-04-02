@@ -1,7 +1,18 @@
 // import { Checkbox } from "@/app/components/ui/checkbox";
+"use client"
 import { Clock } from "lucide-react";
-import Eth from "../../../assets/icons/Eth.svg";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useWallet } from "@fuels/react";
+interface Item {
+  tokenId: string;
+  Item: string;
+  Price: string;
+  Status: string;
+  From: string;
+  To: string;
+  Clock: string;
+  imageUrl?: string;
+}
 
 interface TableItem {
   tokenId: number;
@@ -194,7 +205,31 @@ const items: TableItem[] = [
   },
 ];
 
+
 const BuyTable: React.FC = () => {
+  const { wallet } = useWallet();
+  const [transactions, setTransactions] = useState<TableItem[]>([]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        if (wallet?.address) {
+        const address = wallet?.address.toString();
+        const response = await fetch(`/api/display-tx?address=${address}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTransactions(data)
+      };
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    }
+
+    fetchTransactions();
+  }, [wallet?.address]);
+
   return (
     <div className="overflow-x-auto text-white pb-4 px-6 font-mono w-full">
       <table className="min-w-full text-left table-fixed">
@@ -208,10 +243,7 @@ const BuyTable: React.FC = () => {
               Price
             </th>
             <th scope="col" className="py-3 font-medium pl-2 w-24">
-              Rarity
-            </th>
-            <th scope="col" className="py-3 font-medium pl-2 w-24">
-              Quantity
+              Status
             </th>
             <th scope="col" className="py-3 font-medium pl-2 w-24">
               From
@@ -226,7 +258,7 @@ const BuyTable: React.FC = () => {
         </thead>
 
         <tbody className="divide-y divide-gray-700 text-[16px]">
-          {items.map((item) => (
+          {transactions.map((item) => (
             <tr key={item.tokenId}>
               <td className="p-3">
                 <span className="flex ">
@@ -261,7 +293,7 @@ const BuyTable: React.FC = () => {
               </td>
               <td className="px-2 py-3 text-sm whitespace-nowrap border-gray-500 rounded-lg">
                 <span className="flex">
-                  <Eth className="h-3 mt-1 mr-1" />
+                 
                   {item.Price}
                 </span>
               </td>

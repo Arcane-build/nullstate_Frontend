@@ -17,6 +17,7 @@ interface NFT {
   nftOwnerAddress: string;
   nftCreatorAddress: string;
   nftStatus: string;
+  collectionName: string;
 }
 export interface FetchedNFT {
   id: number;
@@ -68,7 +69,7 @@ const NFTMarketplacePage = () => {
         return {
           id: nft.id,
           title: nft.nftName,
-          collection: nft.id.toString(),
+          collection: nft.collectionName || "unKnown Collection",
           price: parseFloat(nft.nftPrice),
           tokenId: nft.toString(),
           imageUrl: nft.nftImage,

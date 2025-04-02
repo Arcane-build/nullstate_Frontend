@@ -4,7 +4,6 @@ import { Afacad } from "next/font/google";
 // import { useFuel, useIsConnected } from "@fuels/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Eth from "../../assets/icons/Eth.svg";
 import useSWR from "swr";
 const afacad = Afacad({ subsets: ["latin"], weight: ["400", "600", "700"] });
 
@@ -224,6 +223,7 @@ const NFTMintPage: React.FC = () => {
         nftCreatorAddress: wallet.address.toString(),
         nftStatus: "Minted",
         collectionName: formData.collectionDetail,
+        transactionHash: (transactionSummary.id).toString()
       };
       await CreateNftOnServer(entry);
 
@@ -511,7 +511,7 @@ const NFTMintPage: React.FC = () => {
                       <span className="text-gray-400 text-sm">Price</span>
                       <span className="text-white font-bold flex items-center">
                         <span className="mr-2">
-                          <Eth className="h-4 mr-2" />
+                         price
                         </span>
                         {formData.price}
                       </span>
