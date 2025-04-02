@@ -1,5 +1,5 @@
-import React from "react";
-import NFTCard from "./components/Dashboard/NFTCard";
+"use client"
+import React, {useState, useEffect} from "react";
 import TrendingNFT from "./components/TrendingNFT/TrendingNFT";
 import ImageOverlay from "./components/Dashboard/ImageOverlay";
 import NFTCollection from "../data/TableData";
@@ -7,12 +7,39 @@ import CreatorBanner from "./components/Dashboard/CreatorBanner";
 import ExperiencePage from "./components/Dashboard/ExperiencePage";
 import { FaTwitter, FaDiscord, FaInstagram } from "react-icons/fa";
 
+
+interface NFTCollection {
+  collectionName: string;
+  floorPrice: string;
+  volume: string;
+  sales: string;
+  imageUrl: string;
+  lastSoldImageUrls: string[];
+}
+
+
 const HomePage: React.FC = () => {
-  const nftCollection = [
-    { imageSrc: "/images/image 223.png", title: "GK36" },
-    { imageSrc: "/images/image 221.png", title: "GK34" },
-    { imageSrc: "/images/image 196.png", title: "GK35" },
-  ];
+  const [nftCollection, setNftCollection] = useState<NFTCollection[]>([]);
+ 
+
+
+  useEffect(() => {
+    const fetchNFTCollections = async () => {
+      try {
+        const response = await fetch("/api/nft-collections");
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        const data: NFTCollection[] = await response.json();
+        console.log(data);
+        setNftCollection(data);
+      } catch (error) {
+        console.error("Error fetching NFT collections:", error);
+      }
+    };
+
+    fetchNFTCollections();
+  }, []);
 
   return (
     <div className="min-h-screen overflow-auto text-[#E0D9F5] font-w95 custom-scrollbar bg-black">
@@ -27,17 +54,17 @@ const HomePage: React.FC = () => {
           </div>
         </section>
         <CreatorBanner />
-        <section className="px-4 py-8 m-4 md:m-16">
+        {/* <section className="px-4 py-8 m-4 md:m-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 justify-items-center">
-            {nftCollection.map((nft, index) => (
-              <NFTCard key={index} imageSrc={nft.imageSrc} title={nft.title} />
+            {nftCollection && nftCollection.map((nft, index) => (
+              <NFTCard key={index} imageSrc={nft.imageUrl} title={nft.collectionName} />
             ))}
           </div>
-        </section>
+        </section> */}
       </div>
 
       <div className="mb-8 bg-black"></div>
-      <TrendingNFT data={NFTCollection} limit={10} />
+      <TrendingNFT data={nftCollection} limit={10} />
       <ExperiencePage />
 
       {/* FOOTER */}

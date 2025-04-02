@@ -30,7 +30,7 @@ const TabMenu: React.FC = () => {
         )}
       </button>
       {/* watchlist */}
-      <button
+      {/* <button
         onClick={() => setActiveTab("watchlist")}
         className="relative flex flex-col items-center group"
       >
@@ -47,7 +47,7 @@ const TabMenu: React.FC = () => {
         {activeTab === "watchlist" && (
           <div className="w-full h-0.5 bg-[#986FE6] mt-2" />
         )}
-      </button>
+      </button> */}
     </nav>
   );
 };
