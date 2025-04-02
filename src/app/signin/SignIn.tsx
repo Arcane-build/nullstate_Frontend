@@ -34,7 +34,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br pt-20 from-gray-800 to-black p-4">
+    <div className="min-h-screen flex items-center justify-center bg-black bg-gradient-to-b pt-20 from-[#5539A8] via-[rgba(116,14,63,40%)] to-black p-4">
       <div className="max-w-md w-full bg-gray-900 rounded-xl shadow-2xl overflow-hidden">
         <div className="relative h-32 bg-gradient-to-r from-indigo-700 to-purple-700">
           <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-800 p-3 rounded-full shadow-lg">
