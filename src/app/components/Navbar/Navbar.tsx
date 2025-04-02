@@ -8,11 +8,13 @@ import {
   useConnectUI,
   useDisconnect,
 } from "@fuels/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session, status } = useSession();
   const { isConnected } = useIsConnected();
   const { accounts } = useAccounts();
   const { connect } = useConnectUI();
@@ -46,66 +48,26 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const isUserSignedIn = status === "authenticated";
+  const userImage = session?.user?.image || "/images/default-avatar.png";
+
   // Wallet controls JSX (used in desktop header and mobile overlay)
   const walletControls = (
     <div className="flex gap-4 items-center">
-      {isConnected && address ? (
+      {isUserSignedIn ? (
         <>
-          <div className="bg-white text-black py-2 px-3 rounded-[3px] font-afacad flex items-center">
-            <img src="/images/fuel.png" className="mr-2 h-6" alt="FUEL" />
-            FUEL
-          </div>
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="bg-[#E0CFFE] text-[#4023B5] py-2 px-3 rounded-[3px] font-afacad cursor-pointer flex items-center"
-          >
-            {truncatedAddr}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={`ml-2 transition-transform duration-200 ${
-                isDropdownOpen ? "transform rotate-180" : ""
-              }`}
-            >
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          <Link href="/profile" className="w-10">
-            <img
-              src="/images/nft_cat.png"
-              className="rounded-full w-10"
-              alt="Profile"
-            />
-          </Link>
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-12 w-48 bg-[#E0CFFE] rounded-md shadow-lg py-1 z-50">
-              <Link
-                href="/profile"
-                className="block w-full text-left px-4 py-2 text-[#4023B5] hover:bg-purple-100 font-afacad"
-              >
-                Profile
-              </Link>
+          {/* Show connect wallet button only if user is signed in */}
+          {isConnected && address ? (
+            <>
+              <div className="bg-white text-black py-2 px-3 rounded-[3px] font-afacad flex items-center">
+                <img src="/images/fuel.png" className="mr-2 h-6" alt="FUEL" />
+                FUEL
+              </div>
               <button
-                onClick={() => {
-                  setIsDropdownOpen(false);
-                  // Add actual switch account logic here
-                }}
-                className="block w-full text-left px-4 py-2 text-[#4023B5] hover:bg-purple-100 font-afacad"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="bg-[#E0CFFE] text-[#4023B5] py-2 px-3 rounded-[3px] font-afacad cursor-pointer flex items-center"
               >
-                Switch Account
-              </button>
-              <button
-                onClick={() => disconnect()}
-                className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 font-afacad flex items-center justify-between"
-              >
-                <span>Sign Out</span>
+                {truncatedAddr}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -116,21 +78,84 @@ const Navbar = () => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className={`ml-2 transition-transform duration-200 ${
+                    isDropdownOpen ? "transform rotate-180" : ""
+                  }`}
                 >
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
-            </div>
+            </>
+          ) : (
+            <button
+              onClick={() => connect()}
+              className="bg-[#E0CFFE] text-[#4023B5] py-2 font-semibold px-5 rounded-[3px] font-afacad cursor-pointer"
+            >
+              CONNECT WALLET
+            </button>
           )}
+
+          {/* User profile and dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-10"
+            >
+              <img
+                src={userImage}
+                className="rounded-full w-10 h-10 object-cover"
+                alt="Profile"
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-[#E0CFFE] rounded-md shadow-lg py-1 z-50">
+                <Link
+                  href="/profile"
+                  className="block w-full text-left px-4 py-2 text-[#4023B5] hover:bg-purple-100 font-afacad"
+                >
+                  Profile
+                </Link>
+                {isConnected && (
+                  <button
+                    onClick={() => disconnect()}
+                    className="w-full text-left px-4 py-2 text-[#4023B5] hover:bg-purple-100 font-afacad"
+                  >
+                    Disconnect Wallet
+                  </button>
+                )}
+                <button
+                  onClick={() => signOut()}
+                  className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 font-afacad flex items-center justify-between"
+                >
+                  <span>Sign Out</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
         </>
       ) : (
+        /* Show sign in button if user is not signed in */
         <button
-          onClick={() => connect()}
+          onClick={() => signIn()}
           className="bg-[#E0CFFE] text-[#4023B5] py-2 font-semibold px-5 rounded-[3px] font-afacad cursor-pointer"
         >
-          CONNECT WALLET
+          SIGN IN
         </button>
       )}
     </div>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import StackIcon from "../../../assets/icons/Stack.svg";
 import TrendUpIcon from "../../../assets/icons/TrendUp.svg";
 // import StarIcon from "../../../assets/icons/star.svg";
 

@@ -64,10 +64,6 @@ const NFTMarketplacePage = () => {
       const onlyMinted = data.filter((nft) => nft.nftStatus === "Minted");
       console.log("Only minted is ", onlyMinted);
 
-
-
-      
-
       const fetchedNFT: FetchedNFT[] = onlyMinted.map((nft) => {
         return {
           id: nft.id,
@@ -91,7 +87,6 @@ const NFTMarketplacePage = () => {
   const [activeTab, setActiveTab] = useState<"collection" | "activity">(
     "collection"
   );
-  const totalCollections = 79;
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white font-afacad">
