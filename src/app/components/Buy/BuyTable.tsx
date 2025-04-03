@@ -12,17 +12,6 @@ interface TableItem {
   imageUrl?: string;
 }
 
-const items: TableItem[] = [
-  {
-    tokenId: 6771,
-    Item: "Azuki #6771",
-    From: "0xSeller1",
-    To: "0xBuyer1",
-    Clock: "4m ago",
-    imageUrl: "/images/Azuki.png",
-  },
-  // ... other items
-];
 
 const BuyTable: React.FC = () => {
   const { wallet } = useWallet();
